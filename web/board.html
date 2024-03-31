@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Start your development with Meyawo landing page.">
+    <meta name="author" content="Devcrud">
+    <title>우신고등학교 알파고 공식 웹사이트</title>
+    <!-- Bootstrap + Meyawo main styles -->
+    <link rel="stylesheet" href="assets/css/meyawo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gasoek+One&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gasoek+One&family=Gowun+Dodum&display=swap"
+        rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+    <!-- Page Navbar -->
+    <nav class="custom-navbar" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="logo" href="/" style="font-family: 'Black Han Sans', sans-serif;">우신고등학교 알파고</a>
+            <ul class="nav">
+                <li class="item">
+                    <a class="link" href="index.html">홈</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="#">공지사항</a>
+                </li>
+            </ul>
+        </div>
+    </nav><!-- End of Page Navbar -->
+
+    <!-- Header -->
+    <header class="board-background">
+        <h1 class="header-title">공지사항</h1>
+    </header>
+
+    <!-- notice section -->
+    <section class="section py-5">
+        <!-- Container -->
+        <div class="container text-center">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 50px;">번호</th>
+                            <th>제목</th>
+                            <th style="min-width: 80px;">작성자</th>
+                            <th>작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody id="noticeTableBody"></tbody>
+                </table>
+            </div>
+            <div class="btn-container">
+                <button id="prevPageBtn" class="btn btn-secondary btn-sm"
+                    onclick="changePage(currentPage - 1)">이전</button>
+                <button id="nextPageBtn" class="btn btn-secondary btn-sm ml-2"
+                    onclick="changePage(currentPage + 1)">다음</button>
+            </div>
+        </div>
+    </section><!-- end of notice section -->
+    <script>
+        var jsonArray = [];
+        var itemsPerPage = 10;
+        var currentPage = 1;
+
+        function loadNotices() {
+            $.getJSON("notification.json", function (data) {
+                jsonArray = data;
+                displayNotices(currentPage);
+                displayPagination();
+                updatePageButtons();
+            });
+        }
+
+        function displayNotices(page) {
+            var start = (page - 1) * itemsPerPage;
+            var end = start + itemsPerPage;
+            var rows = "";
+
+
+            for (var i = start; i < end && i < jsonArray.length; i++) {
+                var noticeId = i + 1;
+                var noticeLink = "notice" + noticeId + ".html";
+                rows += "<tr><td>" + noticeId + "</td><td><a href='" + noticeLink + "'>" + jsonArray[i].title + "</a></td><td>" + jsonArray[i].author + "</td><td>" + jsonArray[i].date + "</td></tr>";
+            }
+
+            $("#noticeTableBody").html(rows);
+        }
+
+        function displayPagination() {
+            var totalPages = Math.ceil(jsonArray.length / itemsPerPage);
+            var pagination = "";
+
+            for (var i = 1; i <= totalPages; i++) {
+                pagination += "<button class='btn btn-secondary ml-1' onclick='changePage(" + i + ")'>" + i + "</button>";
+            }
+
+            $("#pagination").html(pagination);
+        }
+
+        function changePage(page) {
+            if (page >= 1 && page <= Math.ceil(jsonArray.length / itemsPerPage)) {
+                currentPage = page;
+                displayNotices(currentPage);
+                updatePageButtons();
+            }
+        }
+
+        function updatePageButtons() {
+            var totalPages = Math.ceil(jsonArray.length / itemsPerPage);
+
+            if (currentPage === 1) {
+                $("#prevPageBtn").prop("disabled", true);
+            } else {
+                $("#prevPageBtn").prop("disabled", false);
+            }
+
+            if (currentPage === totalPages) {
+                $("#nextPageBtn").prop("disabled", true);
+            } else {
+                $("#nextPageBtn").prop("disabled", false);
+            }
+        }
+
+        // 페이지 로드 시 JSON 데이터를 불러옵니다.
+        $(document).ready(function () {
+            loadNotices();
+        });
+    </script>
+
+    <!-- footer -->
+    <div class="container">
+        <footer class="footer">
+            <p>
+                ⓒ2024. Alphago all rights reserved.
+            </p>
+            <div class="text-right m-auto ml-sm-auto">
+                <p><a href="https://wooshin.sen.hs.kr/" style="color:#4B89DC">우신고등학교</a></p>
+                <p> </p>
+                <p><a href="https://github.com/wooshin-alphago/Alphago-history" style="color:#4B89DC">Github</a></p>
+            </div>
+        </footer>
+    </div> <!-- end of page footer -->
+
+    <!-- Meyawo js -->
+    <script src="assets/js/meyawo.js"></script>
+</body>
+
+</html>

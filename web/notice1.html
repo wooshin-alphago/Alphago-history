@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Start your development with Meyawo landing page.">
+    <meta name="author" content="Devcrud">
+    <title>우신고등학교 알파고 공식 웹사이트</title>
+    <!-- Bootstrap + Meyawo main styles -->
+    <link rel="stylesheet" href="assets/css/meyawo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gasoek+One&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gasoek+One&family=Gowun+Dodum&display=swap"
+        rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+
+    <!-- Page Navbar -->
+    <nav class="custom-navbar" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="logo" href="/" style="font-family: 'Black Han Sans', sans-serif;">우신고등학교 알파고</a>
+            <ul class="nav">
+                <li class="item">
+                    <a class="link" href="index.html">홈</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="board.html">공지사항</a>
+                </li>
+            </ul>
+        </div>
+    </nav><!-- End of Page Navbar -->
+
+    <!-- Page Header -->
+    <header class="board-background">
+        <div class="overlay"></div>
+        <div class="header-content">
+            <h1 class="header-title" id="title">공지사항 제목</h1>
+            <p class="header-subtitle" id="NameDate">작성자 | 작성일</p>
+        </div>
+    </header><!-- End of Page Header -->
+
+    <!-- Notice Content Section -->
+    <section class="section">
+        <div class="container">
+            <div class="notice-content">
+                <p>공지사항 내용을 여기에 입력하세요.</p>
+            </div>
+        </div>
+    </section><!-- End of Notice Content Section -->
+
+    <!-- footer -->
+    <div class="container">
+        <footer class="footer">
+            <p>
+                ⓒ2024. Alphago all rights reserved.
+            </p>
+            <div class="text-right m-auto ml-sm-auto">
+                <p><a href="https://wooshin.sen.hs.kr/" style="color:#4B89DC">우신고등학교</a></p>
+                <p> </p>
+                <p><a href="https://github.com/wooshin-alphago/Alphago-history" style="color:#4B89DC">Github</a></p>
+            </div>
+        </footer>
+    </div> <!-- end of page footer -->
+    <script>
+        $(document).ready(function() {
+          loadNoticeData();
+        });
+      
+        function loadNoticeData() {
+          $.getJSON('notification.json', function(data) {
+            var noticeData = data[0]; // ************** i + 1번째 json 데이터를 가져옴(파이썬과 유사)
+            $('#title').text(noticeData.title);
+            $('#NameDate').text(noticeData.author + ' | ' + noticeData.date);
+            $('.notice-content').html('<p>' + noticeData.content + '</p>');
+          }).fail(function() {
+            console.log('Failed to load notice data.');
+          });
+        }
+      </script>
+    <!-- Meyawo js -->
+    <script src="assets/js/meyawo.js"></script>
+</body>
+
+</html>
